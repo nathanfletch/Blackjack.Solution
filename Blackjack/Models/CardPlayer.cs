@@ -1,4 +1,4 @@
-namespace ToDoList.Models
+namespace Blackjack.Models
 {
   public class CardPlayer
     {       

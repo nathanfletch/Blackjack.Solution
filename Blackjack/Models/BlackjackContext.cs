@@ -6,7 +6,7 @@ namespace Blackjack.Models
   {
     public DbSet<Card> Cards { get; set; }
     public DbSet<Player> Players { get; set; }
-    public DbSet<CardPlayer> CardPlayers { get; set; }
+    public DbSet<CardPlayer> CardPlayer { get; set; }
 
     public BlackjackContext(DbContextOptions options) : base(options) { }
 

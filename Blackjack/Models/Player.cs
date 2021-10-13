@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ProjectName.Models
+namespace Blackjack.Models
 {
   public class Player
     {

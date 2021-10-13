@@ -11,6 +11,17 @@
 * ASP.NET Core MVC Framework
 * Restful Routing Conventions
 
+## Setup
+dotnet add package Microsoft.EntityFrameworkCore -v 5.0.0
+dotnet add package Pomelo.EntityFrameworkCore.MySql -v 5.0.0-alpha.2
+dotnet add package Microsoft.EntityFrameworkCore.Proxies -v 5.0.0
+dotnet add package Microsoft.EntityFrameworkCore.Design -v 5.0.0
+
+dotnet tool install --global dotnet-ef 
+//--version 3.0.0
+dotnet ef migrations add Initial
+dotnet ef database update
+
 
 ## Known Issues
 * There are no known issues at this time.
