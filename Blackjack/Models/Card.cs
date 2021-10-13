@@ -4,9 +4,11 @@ namespace Blackjack.Models
 {
     public class Card
     {
-        public Card()
+        public Card(int value, string name)
         {
-            this.JoinEntities = new HashSet<CardPlayer>();
+          Value = value;
+          Name = name;
+          this.JoinEntities = new HashSet<CardPlayer>();
         }
 
         public int CardId { get; set; }

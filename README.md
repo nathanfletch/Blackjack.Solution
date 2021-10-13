@@ -64,3 +64,22 @@ static methods - had access to the private data list _instances - do they have a
   CalcScore
   Draw - button - logic in the route "Draw" route
   
+
+Tasks
+Cards
+C - Generate the deck - auto or button?
+R - display deck? need index, etc?
+no views at all for card
+Players
+C get, post, view
+R index, details - game ui
+
+//user stories 
+name?
+post route actually creates dealer too
+
+<!-- 
+U
+D 
+-->
+
