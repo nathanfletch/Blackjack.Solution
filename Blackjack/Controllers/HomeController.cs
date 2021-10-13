@@ -18,15 +18,14 @@ namespace Blackjack.Controllers
     
     [HttpGet("/")]
     public ActionResult Index() { 
+      
 
-      //get the cards 
-      List<Card> Cards = _db.Cards.ToList(); 
-      //check if empty
-      if(Cards.Count != 104)
+      //reset hands
+      _db.CardPlayer.RemoveRange(_db.CardPlayer);
+      _db.SaveChanges();
+
+      if(_db.Cards.ToList().Count != 104)
       {
-        //dump
-        _db.Cards.RemoveRange(_db.Cards);
-
         for(int i = 1; i <= 13; i++)
         {
           string cardName;
