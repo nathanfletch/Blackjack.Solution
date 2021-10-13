@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 
 namespace Blackjack.Models
 {
@@ -16,5 +17,19 @@ namespace Blackjack.Models
         public int Value { get; set; }
 
         public virtual ICollection<CardPlayer> JoinEntities { get;}
+
+        public static int GetUniqueRandomId(List<int> usedCardIds)
+        { 
+          Random generator = new Random();
+          int newId = generator.Next(104) + 1;
+          while(usedCardIds.Contains(newId))
+          {
+            newId = generator.Next(104) + 1;
+          }
+          return newId;
+        }
     }
+
+    
+    
 }

@@ -27,24 +27,47 @@ namespace Blackjack.Controllers
       //Add another player - try after this works
       _db.Players.Add(player);
       _db.SaveChanges();
-
+      
+      //draw 2
       for (int i = 1; i <=2; i++)
       {
         //get a list of the jointable elements
         List<int> usedCardIds = _db.CardPlayer.Select(cardPlayer => cardPlayer.CardId).ToList();
-
-        //use the random while loop thing to test if it's in that list
-        Random generator = new Random();
-        int newId = generator.Next(104) + 1;
-        while(usedCardIds.Contains(newId))
-        {
-          Console.WriteLine($"Old crappy id: {newId}");
-          newId = generator.Next(104) + 1;
-        }
-      _db.CardPlayer.Add(new CardPlayer() { CardId = newId, PlayerId = player.PlayerId  });
-      _db.SaveChanges();
+        int newCardId = Card.GetUniqueRandomId(usedCardIds);
+        // += the cardvalue to the score prop, pass in to Entry()
+        Card newCard = _db.Cards.FirstOrDefault(c => c.CardId == newCardId);
+        player.Score += newCard.Value;
+        _db.Entry(player).State = EntityState.Modified;
+        _db.CardPlayer.Add(new CardPlayer() { CardId = newCardId, PlayerId = player.PlayerId  });
+        _db.SaveChanges();
       }
-      // var result = from person in _db.Person
+      
+      
+      return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public ActionResult Hit(int PlayerId)
+    {
+      Console.WriteLine($"Id: {PlayerId}");
+      
+      List<int> usedCardIds = _db.CardPlayer.Select(cardPlayer => cardPlayer.CardId).ToList();
+      int newCardId = Card.GetUniqueRandomId(usedCardIds);
+      // += the cardvalue to the score prop, pass in to Entry()
+      Card newCard = _db.Cards.FirstOrDefault(c => c.CardId == newCardId);
+      Player newPlayer = _db.Players.FirstOrDefault(p => p.PlayerId == PlayerId);
+      //find player by id
+      newPlayer.Score += newCard.Value;
+      _db.Entry(newPlayer).State = EntityState.Modified;
+      _db.CardPlayer.Add(new CardPlayer() { CardId = newCardId, PlayerId = newPlayer.PlayerId  });
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+
+  }
+}
+
+// var result = from person in _db.Person
       //        select new
       //        {
       //           id = person.Id,
@@ -60,11 +83,3 @@ namespace Blackjack.Controllers
       //       select new { card, cardPlayer };
       // var queryList = query.ToList();
       // Console.WriteLine($"Count: {queryList.Count}");
-      return RedirectToAction("Index");
-    }
-
-
-  }
-}
-
-
