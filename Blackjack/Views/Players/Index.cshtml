@@ -1,3 +1,23 @@
 @{
   Layout = "_Layout";
 }
+
+@using Blackjack.Models;
+@model List<Blackjack.Models.Player>;
+
+<h1>Players</h1>
+
+@if (@Model.Count == 0)
+{
+  <h3>No players have been added yet!</h3>
+} 
+
+<ul>
+@foreach (Player player in Model)
+{
+  <li>@Html.ActionLink($"{player.Name}", "Details", new { id = player.PlayerId })</li>
+}
+</ul>
+
+<p>@Html.ActionLink("Add new player", "Create")</p>
+<p>@Html.ActionLink("Home", "Index", "Home")</p>

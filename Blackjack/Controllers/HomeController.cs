@@ -20,7 +20,7 @@ namespace Blackjack.Controllers
     public ActionResult Index() { 
 
       //get the cards 
-      List<Card> Cards = _db.Cards.ToList(); //constructor to set _db, usings
+      List<Card> Cards = _db.Cards.ToList(); 
       //check if empty
       if(Cards.Count != 104)
       {
