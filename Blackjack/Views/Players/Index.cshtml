@@ -18,14 +18,11 @@
   <li>
     <div class="card">
       <h5 class="card-header">
-        @if(player.IsDealer)
-        {
-          <span>Dealer: </span>
-        }
         @player.Name
       </h5>
       <div class="card-body">
         <h5 class="card-title">Current Score: @player.Score</h5>
+        <h5 class="card-title">Current Bet: @player.Bet</h5>
         <ul class="card-text">
 
           <h5>Hand: </h5>
@@ -34,15 +31,15 @@
             <li>@join.Card.Name</li>
           }
         
-        @*@using(@Html.BeginForm("Hold"))
+        @if (player.IsPlaying)
         {
-          <input type="submit" value="Hold">
-        }*@
+          @Html.ActionLink("Hold", "Hold", "Players")
 
-        @using(@Html.BeginForm("Hit", "Players"))
-        {
-          @Html.Hidden("playerId", @player.PlayerId)
-          <input type="submit" value="Hit" class="btn btn-primary">
+          @using(@Html.BeginForm("Hit", "Players"))
+          {
+            @Html.Hidden("playerId", @player.PlayerId)
+            <input type="submit" value="Hit" class="btn btn-primary">
+          }
         }
       </div>
     </div>

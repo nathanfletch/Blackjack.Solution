@@ -1,0 +1,30 @@
+@{
+  Layout = "_Layout";
+}
+
+@using Blackjack.Models;
+
+@for (int i = 0; i < @Model.Count; i++)
+{
+  @if ( (Model[i].Score > 21 && Model[i].IsPlaying) || (Model[i].Score < 21 && Model[(i - 1) * -1].Score == 21))
+  {
+    <h3>@Model[i].Name Lost!</h3> 
+    <h3>@Model[i].Name lost $@Model[i].Bet</h3>
+    <h3>@Model[i].Name has $@Model[i].Money</h3>
+  }
+  else
+  {
+    <h3>@Model[i].Name Won!</h3> 
+    <h3>@Model[i].Name won $@Model[i].Bet</h3>
+    <h3>@Model[i].Name has $@Model[i].Money</h3>
+  }
+  <h3>Final hand: </h3>
+  @foreach (var join in Model[i].JoinEntities)
+  {
+    <li>@join.Card.Name</li>
+  }
+  <h3>Final score: @Model[i].Score</h3>
+}
+
+<p>@Html.ActionLink("Play again", "Index", "Home")</p>
+

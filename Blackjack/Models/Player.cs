@@ -17,6 +17,8 @@ namespace Blackjack.Models
     public int Bet { get; set; }
     public int Money { get; set; }
     public bool IsDealer { get; set; }
+
+    public bool IsPlaying { get; set; } // set it somewhere, migrate
     public virtual ICollection<CardPlayer> JoinEntities { get; set; }
 
   }
