@@ -19,17 +19,20 @@ namespace Blackjack.Controllers
     public ActionResult Index()
     {
       List<Player> players = _db.Players.ToList();
-      Console.WriteLine($"list count: {players.Count}");
       
       // test and draw 2?
       for (int i = 0; i < players.Count; i++)
       {
+        List<CardPlayer> cardsInAllHands = _db.CardPlayer.ToList();
+        List<CardPlayer> cardsInCurrentPlayersHand = cardsInAllHands.Where(cardPlayer => cardPlayer.PlayerId == players[i].PlayerId).ToList();
 
-        Console.WriteLine($"player name: {players[i].Name}");
-        Draw(players[i]);
-        Draw(players[i]);
+        if(cardsInCurrentPlayersHand.Count == 0)
+        {
+          ClearScore(players[i]);
+          Draw(players[i]);
+          Draw(players[i]);
+        }
       }
-
       return View(players);
     }
     [HttpPost]
@@ -38,24 +41,19 @@ namespace Blackjack.Controllers
       //Add another player - try after this works
       _db.Players.Add(player);
       _db.SaveChanges();
-      
+
       //draw 2
       Draw(player);
       Draw(player);
      
-      
-      
-      
       return RedirectToAction("Index");
     }
 
     [HttpPost]
     public ActionResult Hit(int PlayerId)
     {
-      Console.WriteLine($"Id: {PlayerId}");
-      
       // += the cardvalue to the score prop, pass in to Entry()
-      Player newPlayer = _db.Players.FirstOrDefault(p => p.PlayerId == PlayerId);
+      Player newPlayer = _db.Players.FirstOrDefault(player => player.PlayerId == PlayerId);
       //find player by id
       Draw(newPlayer);
       return RedirectToAction("Index");
@@ -67,17 +65,21 @@ namespace Blackjack.Controllers
 
       Random generator = new Random();
       int newCardId = generator.Next(cardList[0].CardId, cardList[12].CardId) + 1;
-      Console.WriteLine($"New ID: {newCardId}");
       // += the cardvalue to the score prop, pass in to Entry()
       Card newCard = _db.Cards.FirstOrDefault(c => c.CardId == newCardId);
       
-      Console.WriteLine($"Value: {newCard.Value}");
       player.Score += newCard.Value;
       _db.Entry(player).State = EntityState.Modified;
       _db.CardPlayer.Add(new CardPlayer() { CardId = newCardId, PlayerId = player.PlayerId });
       _db.SaveChanges();
     }
 
+    public void ClearScore(Player player)
+    {
+      player.Score = 0;
+      _db.Entry(player).State = EntityState.Modified;
+      _db.SaveChanges();
+    }
   }
 }
 
