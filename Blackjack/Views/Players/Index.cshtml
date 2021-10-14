@@ -3,8 +3,8 @@
 }
 
 @using Blackjack.Models;
-@model List<Blackjack.Models.Player>;
-
+@*@model List<Blackjack.Models.Player>;*@
+@*incoming model, outgoing model*@
 <h1>Players</h1>
 
 @if (@Model.Count == 0)
@@ -38,9 +38,10 @@
         {
           <input type="submit" value="Hold">
         }*@
-        @using(@Html.BeginForm("Hit"))
+
+        @using(@Html.BeginForm("Hit", "Players"))
         {
-          @Html.Hidden("PlayerId")
+          @Html.Hidden("playerId", @player.PlayerId)
           <input type="submit" value="Hit" class="btn btn-primary">
         }
       </div>

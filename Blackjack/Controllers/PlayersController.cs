@@ -53,6 +53,7 @@ namespace Blackjack.Controllers
     public ActionResult Hit(int PlayerId)
     {
       // += the cardvalue to the score prop, pass in to Entry()
+      Console.WriteLine($"PlayerId: {PlayerId}");
       Player newPlayer = _db.Players.FirstOrDefault(player => player.PlayerId == PlayerId);
       //find player by id
       Draw(newPlayer);
