@@ -18,14 +18,15 @@ namespace Blackjack.Controllers
     
     [HttpGet("/")]
     public ActionResult Index() { 
-      
-
+      ViewBag.Count = _db.Players.ToList().Count;
       //reset hands
       _db.CardPlayer.RemoveRange(_db.CardPlayer);
       _db.SaveChanges();
 
-      if(_db.Cards.ToList().Count != 104)
+      //populate deck
+      if(_db.Cards.ToList().Count != 13)
       {
+        _db.Cards.RemoveRange(_db.Cards);
         for(int i = 1; i <= 13; i++)
         {
           string cardName;
@@ -58,11 +59,7 @@ namespace Blackjack.Controllers
               cardValue = i;
             break;
           }
-          for (int j = 0; j < 8; j++)
-          {
-            Card newCard = new Card(cardValue, cardName);
-            _db.Cards.Add(newCard);
-          }
+          _db.Cards.Add(new Card(cardValue, cardName));
         }
         _db.SaveChanges();
       }

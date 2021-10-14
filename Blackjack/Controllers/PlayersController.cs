@@ -19,6 +19,17 @@ namespace Blackjack.Controllers
     public ActionResult Index()
     {
       List<Player> players = _db.Players.ToList();
+      Console.WriteLine($"list count: {players.Count}");
+      
+      // test and draw 2?
+      for (int i = 0; i < players.Count; i++)
+      {
+
+        Console.WriteLine($"player name: {players[i].Name}");
+        Draw(players[i]);
+        Draw(players[i]);
+      }
+
       return View(players);
     }
     [HttpPost]
@@ -29,18 +40,10 @@ namespace Blackjack.Controllers
       _db.SaveChanges();
       
       //draw 2
-      for (int i = 1; i <=2; i++)
-      {
-        //get a list of the jointable elements
-        List<int> usedCardIds = _db.CardPlayer.Select(cardPlayer => cardPlayer.CardId).ToList();
-        int newCardId = Card.GetUniqueRandomId(usedCardIds);
-        // += the cardvalue to the score prop, pass in to Entry()
-        Card newCard = _db.Cards.FirstOrDefault(c => c.CardId == newCardId);
-        player.Score += newCard.Value;
-        _db.Entry(player).State = EntityState.Modified;
-        _db.CardPlayer.Add(new CardPlayer() { CardId = newCardId, PlayerId = player.PlayerId  });
-        _db.SaveChanges();
-      }
+      Draw(player);
+      Draw(player);
+     
+      
       
       
       return RedirectToAction("Index");
@@ -51,30 +54,41 @@ namespace Blackjack.Controllers
     {
       Console.WriteLine($"Id: {PlayerId}");
       
-      List<int> usedCardIds = _db.CardPlayer.Select(cardPlayer => cardPlayer.CardId).ToList();
-      int newCardId = Card.GetUniqueRandomId(usedCardIds);
       // += the cardvalue to the score prop, pass in to Entry()
-      Card newCard = _db.Cards.FirstOrDefault(c => c.CardId == newCardId);
       Player newPlayer = _db.Players.FirstOrDefault(p => p.PlayerId == PlayerId);
       //find player by id
-      newPlayer.Score += newCard.Value;
-      _db.Entry(newPlayer).State = EntityState.Modified;
-      _db.CardPlayer.Add(new CardPlayer() { CardId = newCardId, PlayerId = newPlayer.PlayerId  });
-      _db.SaveChanges();
+      Draw(newPlayer);
       return RedirectToAction("Index");
+    }
+
+    public void Draw(Player player)
+    {
+      List<Card> cardList = _db.Cards.ToList();
+
+      Random generator = new Random();
+      int newCardId = generator.Next(cardList[0].CardId, cardList[12].CardId) + 1;
+      Console.WriteLine($"New ID: {newCardId}");
+      // += the cardvalue to the score prop, pass in to Entry()
+      Card newCard = _db.Cards.FirstOrDefault(c => c.CardId == newCardId);
+      
+      Console.WriteLine($"Value: {newCard.Value}");
+      player.Score += newCard.Value;
+      _db.Entry(player).State = EntityState.Modified;
+      _db.CardPlayer.Add(new CardPlayer() { CardId = newCardId, PlayerId = player.PlayerId });
+      _db.SaveChanges();
     }
 
   }
 }
 
 // var result = from person in _db.Person
-      //        select new
-      //        {
-      //           id = person.Id,
-      //           firstname = person.Firstname,
-      //           lastname = person.Lastname,
-      //           detailText = person.PersonDetails.Select(d => d.DetailText).SingleOrDefault()
-      //       };
+//              select new
+//              {
+//                 id = person.Id,
+//                 firstname = person.Firstname,
+//                 lastname = person.Lastname,
+//                 detailText = person.PersonDetails.Select(d => d.DetailText).SingleOrDefault()
+//             };
 
       // var query = from card in _db.Cards
       //       join cardPlayer in _db.CardPlayer

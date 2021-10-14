@@ -5,17 +5,23 @@
 @model Blackjack.Models.Player 
 
 <h1>Welcome to the table. Counters will be executed.</h1>
-
-@using(Html.BeginForm("Create", "Players"))
+@if (ViewBag.Count < 2)
 {
-  @Html.LabelFor(model => model.Name, "Enter your name: ")
-  @Html.TextBoxFor(model => model.Name)
+  @using(Html.BeginForm("Create", "Players"))
+  {
+    @Html.LabelFor(model => model.Name, "Enter your name: ")
+    @Html.TextBoxFor(model => model.Name)
 
-  @Html.LabelFor(model => model.Money, "How much money do you have in your bank today?")
-  @Html.EditorFor(model => model.Money)
-  
-  @Html.LabelFor(model => model.Bet, "Place your bet: ")
-  @Html.EditorFor(model => model.Bet)
+    @Html.LabelFor(model => model.Money, "How much money do you have in your bank today?")
+    @Html.EditorFor(model => model.Money)
+    
+    @Html.LabelFor(model => model.Bet, "Place your bet: ")
+    @Html.EditorFor(model => model.Bet)
 
-  <input type="submit" value="Start Game" />
+    <input type="submit" value="Start Game" />  
+  }
+}
+else
+{
+  <p>@Html.ActionLink("New Game", "Index", "Players")</p>
 }
